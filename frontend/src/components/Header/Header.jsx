@@ -1,0 +1,115 @@
+import React, { useRef, useEffect, useContext } from "react";
+import { Container, Row, Button } from "reactstrap";
+import { NavLink, Link, useNavigate } from "react-router-dom";
+import logo from "../../assets/images/logo.png";
+import "./header.css";
+import { AuthContext } from "./../../context/AuthContext";
+
+const nav_links = [
+  {
+    path: "/",
+    display: "Home",
+  },
+  {
+    path: "/tours",
+    display: "Tours",
+  },
+];
+
+const Header = () => {
+  const headerRef = useRef(null);
+  const menuRef = useRef(null);
+  const navigate = useNavigate();
+  const { dispatch, user } = useContext(AuthContext);
+
+  const logout = () => {
+    dispatch({type:"LOGOUT"});
+    navigate("/login");
+  };
+
+  const stickyHeaderFunc = () => {
+    window.addEventListener("scroll", () => {
+      if (
+        document.body.scrollTop > 80 ||
+        document.documentElement.scrollTop > 80
+      ) {
+        headerRef.current.classList.add("sticky__header");
+      } else {
+        headerRef.current.classList.remove("sticky__header");
+      }
+    });
+  };
+
+  useEffect(() => {
+    stickyHeaderFunc();
+
+    return window.removeEventListener("scroll", stickyHeaderFunc);
+  });
+
+  const toggleMenu = ()=> menuRef.current.classList.toggle('show__menu')
+  return (
+    <header className="header" ref={headerRef}>
+      <Container>
+        <Row>
+          <div className="nav_wrapper d-flex align-items-center justify-content-between">
+            <div className="logo">
+              <img src={logo} alt="" />
+            </div>
+            <div className="navigation" ref={menuRef} onClick={toggleMenu}>
+              <ul className="menu d-flex align-items-center gap-5">
+                {nav_links.map((item, index) => (
+                  <li className="nav_item" Key={index}>
+                    <NavLink
+                      to={item.path}
+                      className={(navClass) =>
+                        navClass.isActive ? "active_link" : ""
+                      }
+                    >
+                      {item.display}
+                    </NavLink>
+                  </li>
+                ))}
+                <div className="dropdown">
+                  <button className="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    My Store
+                  </button>
+                  <ul className="dropdown-menu dropdown-menu-dark">
+                    <li><a className="dropdown-item" href="#" style={{height: "22px"}}>Bookings</a></li>
+                    <li><a className="dropdown-item" href="#" style={{height: "22px"}}>Profile</a></li>
+                    <li><NavLink className="dropdown-item" to="/chatbot" style={{height: "57px"}}>Chatbot</NavLink></li>
+                  </ul>
+                </div>
+              </ul>
+            </div>
+            <div className="nav_right d-flex align-items-center gap-4 ">
+              <div className="nav_btns d-flex align-items-center gap-4 ">
+                {user ? (
+                  <>
+                    <h5 className="mb-0">{user.username}</h5>
+                    <Button className="btn btn-dark" onClick={logout}>
+                      Logout
+                    </Button>
+                  </>
+                ) : (
+                  <>
+                    <Button className="btn booking__btn">
+                      <Link to="/login">Login</Link>
+                    </Button>
+                    <Button className="btn booking__btn">
+                      <Link to="/register">Register</Link>
+                    </Button>
+                  </>
+                )}
+              </div>
+              <span className="mobile_menu" onClick={toggleMenu}>
+                <i class="ri-menu-line"></i>
+              </span>
+            </div>
+          </div>
+        </Row>
+      </Container>
+    </header>
+  );
+};
+
+export default Header;
