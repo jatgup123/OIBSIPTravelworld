@@ -8,8 +8,7 @@ import Searchresultlist from './../pages/Searchresultlist';
 import Td from './../pages/TD1';
 import Tours from './../pages/Tours';
 import ThankYou from './../pages/ThankYou';
-import App from './../App1';
-import Loc from '../pages/Loc';
+import App from './../Chatbot/config';
 //import Cf from './../pages/checkoutfail';
 
 const Routers = () => {
@@ -28,7 +27,6 @@ const Routers = () => {
       <Route path="/cancellation" element={<ThankYou />} />;
       <Route path="/support" element={<ThankYou />} />;
       <Route path="/chatbot" element={<App />} />;
-      <Route path="/loc" element={<Loc />} />;
     </Routes>
   );
 };
