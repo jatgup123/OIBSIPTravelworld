@@ -16,7 +16,7 @@ const Td = () => {
   const [tourRating, setTourRating] = useState(null);
   const {user} = useContext(AuthContext);
   const { data: tour, loading, error } = useFetch(`${BASE_URL}/tours/${id}`);
-  const { photo, title, address, city, price, distance, reviews, maxGroupSize, desc, country} = tour;
+  const { photo, title, address, city, price, distance, reviews, maxGroupSize, desc, country, mmt} = tour;
 
   const { totalRating, avgRating } = calculateAvgRating(reviews);
 
@@ -116,6 +116,9 @@ const Td = () => {
                       </span>
                       <span>
                         <i class="ri-group-line"></i> {maxGroupSize} people
+                      </span>
+                      <span>
+                        <h4><a href={mmt}>makemytrip</a></h4>
                       </span>
                   </div>
                   <h5>Description</h5>
